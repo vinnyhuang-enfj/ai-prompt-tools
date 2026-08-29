@@ -73,13 +73,13 @@
                         id="songContent" 
                         rows="4" 
                         class="w-full bg-amber-50 border-2 border-slate-900 rounded-xl p-3 text-slate-900 placeholder-slate-400 focus:bg-white outline-none font-medium resize-none text-sm"
-                        placeholder="請輸入歌曲主題或故事背景... (例如: 關於一個機器人在雨中尋找遺失記憶的故事)"></textarea>
+                        placeholder="請輸入歌曲內容與主題... (例如: 關於人類與AI創造美好未來的故事)"></textarea>
                 </div>
 
                 <!-- 音樂曲風選擇 -->
                 <div class="flex flex-col gap-1.5">
                     <label for="musicGenre" class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                        <i class="ph ph-vinyl-record text-orange-500"></i> 音樂曲風 (Genre)
+                        <i class="ph ph-vinyl-record text-orange-500"></i> 音樂曲風
                     </label>
                     <select 
                         id="musicGenre" 
@@ -91,7 +91,7 @@
                 <!-- 音樂元素選擇 -->
                 <div class="flex flex-col gap-1.5">
                     <label for="musicElement" class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                        <i class="ph ph-sparkle text-orange-500"></i> 音樂元素 (Elements)
+                        <i class="ph ph-sparkle text-orange-500"></i> 音樂元素
                     </label>
                     <select 
                         id="musicElement" 
@@ -113,14 +113,14 @@
                 <div class="flex flex-col flex-grow">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
-                            <i class="ph ph-terminal-window text-orange-500"></i> 生成結果
+                            <i class="ph ph-terminal-window text-orange-500"></i> 提示詞生成結果
                         </h2>
                         <button 
                             id="copyBtn"
                             class="comic-btn text-sm bg-orange-500 hover:bg-orange-400 text-white py-1.5 px-3 rounded-xl flex items-center gap-1.5 font-bold opacity-0 pointer-events-none disabled:opacity-50"
                             disabled>
                             <i class="ph ph-copy"></i>
-                            <span>複製</span>
+                            <span>複製提示詞</span>
                         </button>
                     </div>
                     
@@ -132,7 +132,7 @@
                 </div>
                 
                 <div id="toast" class="opacity-0 transition-opacity duration-300 mt-4 bg-emerald-400 border-2 border-slate-900 text-slate-900 font-bold px-4 py-2.5 rounded-xl text-sm text-center">
-                    <i class="ph ph-check-circle mr-1"></i> 已複製到剪貼簿！
+                    <i class="ph ph-check-circle mr-1"></i> 已成功複製提示詞！
                 </div>
             </div>
         </div>
