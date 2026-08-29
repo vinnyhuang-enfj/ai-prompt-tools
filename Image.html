@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖片提示詞生成工具 - Vinny的AI百寶箱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #FEF9E7; /* 淡鵝黃色底 */
+            color: #1E293B; /* 黑字 */
+        }
+        .comic-box {
+            border: 3px solid #1E293B;
+            box-shadow: 5px 5px 0px #1E293B;
+        }
+        .comic-btn {
+            border: 2.5px solid #1E293B;
+            box-shadow: 3px 3px 0px #1E293B;
+            transition: all 0.15s ease-in-out;
+        }
+        .comic-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px #1E293B;
+        }
+        .comic-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #1E293B;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FEF3C7; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #F59E0B; 
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen p-4 md:p-8 flex flex-col justify-between">
+
+    <div class="max-w-5xl mx-auto w-full">
+        <!-- 頂部導航列：回首頁 -->
+        <div class="flex items-center justify-between mb-6">
+            <a href="index.html" class="comic-btn inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-white font-bold px-4 py-2 rounded-xl text-sm sm:text-base">
+                <i class="fas fa-arrow-left"></i> 回首頁重新選擇
+            </a>
+            <span class="font-bold text-sm bg-amber-200 border-2 border-slate-900 px-3 py-1 rounded-full">✨ 圖片小幫手</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- 左側：輸入表單 -->
+            <div class="comic-box bg-white rounded-3xl p-6">
+                <h1 class="text-2xl font-black text-slate-900 mb-6 flex items-center gap-2">
+                    <span class="text-orange-500"><i class="fas fa-wand-magic-sparkles"></i></span> 圖片提示詞生成工具
+                </h1>
+
+                <form id="promptForm" class="space-y-4">
+                    <div>
+                        <label for="styleSelect" class="block text-sm font-bold text-slate-800 mb-1">卡片風格</label>
+                        <select id="styleSelect" class="w-full rounded-xl border-2 border-slate-900 p-2.5 bg-amber-50 focus:bg-white outline-none font-medium transition-all">
+                            <option value="手繪風（Hand-drawn）">手繪風（Hand-drawn）</option>
+                            <option value="可愛風（Cute）">可愛風（Cute）</option>
+                            <option value="專業風（Professional）">專業風（Professional）</option>
+                            <option value="科學風（Scientific）">科學風（Scientific）</option>
+                            <option value="動漫風（Anime）">動漫風（Anime）</option>
+                            <option value="黏土風（Clay）">黏土風（Clay）</option>
+                            <option value="社論風（Editorial）">社論風（Editorial）</option>
+                            <option value="教學風（Explanatory）">教學風（Explanatory）</option>
+                            <option value="便當盒排版（Bento）">便當盒排版（Bento）</option>
+                            <option value="積木風格（Block）">積木風格（Block）</option>
+                        </select>
+                        <div id="styleDescription" class="mt-2 text-xs sm:text-sm text-slate-800 bg-amber-100 p-3 rounded-xl border-2 border-slate-900 font-medium leading-relaxed"></div>
+                    </div>
+
+                    <div>
+                        <label for="mainTitle" class="block text-sm font-bold text-slate-800 mb-1">大標題</label>
+                        <input type="text" id="mainTitle" placeholder="例如：什麼是人工智慧？" class="w-full rounded-xl border-2 border-slate-900 p-2.5 bg-amber-50 focus:bg-white outline-none font-medium">
+                    </div>
+
+                    <div>
+                        <label for="subTitle" class="block text-sm font-bold text-slate-800 mb-1">小標題</label>
+                        <input type="text" id="subTitle" placeholder="例如：AI的基礎概念與發展" class="w-full rounded-xl border-2 border-slate-900 p-2.5 bg-amber-50 focus:bg-white outline-none font-medium">
+                    </div>
+
+                    <div>
+                        <label for="content" class="block text-sm font-bold text-slate-800 mb-1">報告內容</label>
+                        <textarea id="content" rows="4" placeholder="請在此輸入知識卡片的詳細內容..." class="w-full rounded-xl border-2 border-slate-900 p-2.5 bg-amber-50 focus:bg-white outline-none font-medium resize-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="sizeSelect" class="block text-sm font-bold text-slate-800 mb-1">圖片尺寸</label>
+                        <select id="sizeSelect" class="w-full rounded-xl border-2 border-slate-900 p-2.5 bg-amber-50 focus:bg-white outline-none font-medium">
+                            <option value="1:1">1:1 (正方形)</option>
+                            <option value="4:3">4:3 (橫向標準)</option>
+                            <option value="3:4">3:4 (直向標準)</option>
+                            <option value="16:9">16:9 (橫向寬屏)</option>
+                            <option value="9:16">9:16 (直向手機)</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 右側：結果預覽 -->
+            <div class="comic-box bg-white rounded-3xl p-6 flex flex-col justify-between">
+                <div class="flex flex-col flex-grow">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
+                            <i class="fas fa-file-alt text-orange-500"></i> 最終提示詞
+                        </h2>
+                        <button id="copyBtn" class="comic-btn bg-orange-500 hover:bg-orange-400 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2">
+                            <i class="fas fa-copy"></i> 複製提示詞
+                        </button>
+                    </div>
+                    
+                    <textarea id="output" readonly class="flex-grow w-full rounded-2xl border-2 border-slate-900 p-4 bg-amber-50 text-slate-900 focus:outline-none resize-none min-h-[360px] text-sm leading-relaxed font-mono shadow-inner"></textarea>
+                </div>
+                
+                <div id="toast" class="opacity-0 transition-opacity duration-300 mt-4 bg-emerald-400 border-2 border-slate-900 text-slate-900 font-bold px-4 py-2.5 rounded-xl text-sm text-center">
+                    <i class="fas fa-check-circle mr-1"></i> 已成功複製提示詞！
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-8 text-center text-sm font-bold text-slate-700">
+        Copyright &copy; Vinny的AI百寶箱
+    </footer>
+
+    <script>
+        const styleDescriptions = {
+            "手繪風（Hand-drawn）": "具有設計感與現場感，屬於萬用風格，適用於各種內容。",
+            "可愛風（Cute）": "採用粉嫩色系與圓滾角色，適合生活化議題、旅遊或兒童教育。",
+            "專業風（Professional）": "色彩乾淨、冷色系為主，風格嚴謹，適合商務提案或正式報告。",
+            "科學風（Scientific）": "類似生物課本的精密結構圖，適合天文、科學或需要比例縮放的內容。",
+            "動漫風（Anime）": "強調動態感，會將內容擬人化（如加入廚師、太空人等元素）。",
+            "黏土風（Clay）": "具備 3D 黏土動畫的溫暖立體感，適合操作指南或幼教教材。",
+            "社論風（Editorial）": "具備雜誌編排感，會將內容拆解為特定結構，設計感強。",
+            "教學風（Explanatory）": "專注於資訊流向，設計簡單清晰，適合員工手冊、QA 或操作手冊。",
+            "便當盒排版（Bento）": "將資訊整理在網格方塊中，適合產品規格比較或多項服務並列。",
+            "積木風格（Block）": "具備幾何邏輯與堆疊結構感，適用於系統架構圖、組織圖或專案階段劃分。"
+        };
+
+        const styleSelect = document.getElementById('styleSelect');
+        const styleDescriptionDiv = document.getElementById('styleDescription');
+        const mainTitleInput = document.getElementById('mainTitle');
+        const subTitleInput = document.getElementById('subTitle');
+        const contentInput = document.getElementById('content');
+        const sizeSelect = document.getElementById('sizeSelect');
+        const output = document.getElementById('output');
+        const copyBtn = document.getElementById('copyBtn');
+        const toast = document.getElementById('toast');
+
+        const formElements = [styleSelect, mainTitleInput, subTitleInput, contentInput, sizeSelect];
+
+        function updateStyleDescription() {
+            const selectedStyle = styleSelect.value;
+            if (styleDescriptions[selectedStyle]) {
+                styleDescriptionDiv.innerHTML = `<strong><i class="fas fa-info-circle mr-1"></i> 特色與適用場景：</strong><br>${styleDescriptions[selectedStyle]}`;
+                styleDescriptionDiv.style.display = 'block';
+            } else {
+                styleDescriptionDiv.style.display = 'none';
+            }
+        }
+
+        function generatePrompt() {
+            const style = styleSelect.value;
+            const mainTitle = mainTitleInput.value || "[未輸入大標題]";
+            const subTitle = subTitleInput.value || "[未輸入小標題]";
+            const content = contentInput.value || "[未輸入內容]";
+            const sizeRaw = sizeSelect.value;
+            const size = sizeRaw.split(' ')[0]; 
+
+            const promptTemplate = `根據下文的報告內容生成一張知識卡片。
+
+##卡片風格：${style}。
+
+##報告原文：{
+
+大標題 : ${mainTitle}
+
+小標題：${subTitle}
+
+${content}
+ 
+}
+ 
+規則:
+1. 要有指定圖片，動作你可以自己設計  
+2. 請顯示正確的繁體中文字
+3. 生成圖片尺寸${size}`;
+
+            output.value = promptTemplate;
+        }
+
+        formElements.forEach(el => {
+            el.addEventListener('input', generatePrompt);
+            el.addEventListener('change', generatePrompt);
+        });
+
+        styleSelect.addEventListener('change', updateStyleDescription);
+
+        copyBtn.addEventListener('click', () => {
+            output.select();
+            output.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+                toast.classList.remove('opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('opacity-0');
+                }, 2000);
+                window.getSelection().removeAllRanges();
+            } catch (err) {
+                alert('複製失敗，請手動選取並複製。');
+            }
+        });
+
+        updateStyleDescription();
+        generatePrompt();
+    </script>
+</body>
+</html>

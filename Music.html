@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUNO 音樂提示詞生成工具 - Vinny的AI百寶箱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            background-color: #FEF9E7; /* 淡鵝黃色底 */
+            color: #1E293B; /* 黑字 */
+        }
+        .comic-box {
+            border: 3px solid #1E293B;
+            box-shadow: 5px 5px 0px #1E293B;
+        }
+        .comic-btn {
+            border: 2.5px solid #1E293B;
+            box-shadow: 3px 3px 0px #1E293B;
+            transition: all 0.15s ease-in-out;
+        }
+        .comic-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px #1E293B;
+        }
+        .comic-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #1E293B;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FEF3C7; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #F59E0B; 
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen p-4 md:p-8 flex flex-col justify-between">
+
+    <div class="max-w-5xl mx-auto w-full">
+        <!-- 頂部導航列：回首頁 -->
+        <div class="flex items-center justify-between mb-6">
+            <a href="index.html" class="comic-btn inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-white font-bold px-4 py-2 rounded-xl text-sm sm:text-base">
+                <i class="ph ph-arrow-left font-bold"></i> 回首頁重新選擇
+            </a>
+            <span class="font-bold text-sm bg-amber-200 border-2 border-slate-900 px-3 py-1 rounded-full">🎵 音樂小幫手</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- 左側：輸入區域 -->
+            <div class="comic-box bg-white rounded-3xl p-6 flex flex-col gap-5">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-orange-500 text-white rounded-xl border-2 border-slate-900">
+                        <i class="ph ph-music-notes text-2xl font-bold"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-black text-slate-900">SUNO 提示詞生成工具</h1>
+                        <p class="text-xs sm:text-sm text-slate-600 font-medium">快速組合曲風與元素，生成音樂提示詞</p>
+                    </div>
+                </div>
+
+                <!-- 歌曲內容輸入 -->
+                <div class="flex flex-col gap-1.5">
+                    <label for="songContent" class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                        <i class="ph ph-text-aa text-orange-500"></i> 歌曲內容與主題
+                    </label>
+                    <textarea 
+                        id="songContent" 
+                        rows="4" 
+                        class="w-full bg-amber-50 border-2 border-slate-900 rounded-xl p-3 text-slate-900 placeholder-slate-400 focus:bg-white outline-none font-medium resize-none text-sm"
+                        placeholder="請輸入歌曲主題或故事背景... (例如: 關於一個機器人在雨中尋找遺失記憶的故事)"></textarea>
+                </div>
+
+                <!-- 音樂曲風選擇 -->
+                <div class="flex flex-col gap-1.5">
+                    <label for="musicGenre" class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                        <i class="ph ph-vinyl-record text-orange-500"></i> 音樂曲風 (Genre)
+                    </label>
+                    <select 
+                        id="musicGenre" 
+                        class="w-full bg-amber-50 border-2 border-slate-900 rounded-xl p-3 text-slate-900 focus:bg-white outline-none font-medium cursor-pointer text-sm">
+                        <option value="" disabled selected>請選擇音樂曲風...</option>
+                    </select>
+                </div>
+
+                <!-- 音樂元素選擇 -->
+                <div class="flex flex-col gap-1.5">
+                    <label for="musicElement" class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                        <i class="ph ph-sparkle text-orange-500"></i> 音樂元素 (Elements)
+                    </label>
+                    <select 
+                        id="musicElement" 
+                        class="w-full bg-amber-50 border-2 border-slate-900 rounded-xl p-3 text-slate-900 focus:bg-white outline-none font-medium cursor-pointer text-sm">
+                        <option value="" disabled selected>請選擇音樂元素...</option>
+                    </select>
+                </div>
+
+                <!-- 生成按鈕 -->
+                <button 
+                    id="generateBtn"
+                    class="comic-btn mt-2 w-full bg-orange-500 hover:bg-orange-400 text-white font-black py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 text-base">
+                    <i class="ph ph-magic-wand text-xl"></i> 生成提示詞
+                </button>
+            </div>
+
+            <!-- 右側：輸出結果 -->
+            <div class="comic-box bg-white rounded-3xl p-6 flex flex-col justify-between">
+                <div class="flex flex-col flex-grow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
+                            <i class="ph ph-terminal-window text-orange-500"></i> 生成結果
+                        </h2>
+                        <button 
+                            id="copyBtn"
+                            class="comic-btn text-sm bg-orange-500 hover:bg-orange-400 text-white py-1.5 px-3 rounded-xl flex items-center gap-1.5 font-bold opacity-0 pointer-events-none disabled:opacity-50"
+                            disabled>
+                            <i class="ph ph-copy"></i>
+                            <span>複製</span>
+                        </button>
+                    </div>
+                    
+                    <textarea 
+                        id="outputPrompt" 
+                        readonly 
+                        class="w-full flex-grow bg-amber-50 border-2 border-slate-900 rounded-2xl p-4 text-slate-900 font-mono text-sm leading-relaxed outline-none resize-none min-h-[320px] shadow-inner"
+                        placeholder="生成的 SUNO 提示詞將顯示於此..."></textarea>
+                </div>
+                
+                <div id="toast" class="opacity-0 transition-opacity duration-300 mt-4 bg-emerald-400 border-2 border-slate-900 text-slate-900 font-bold px-4 py-2.5 rounded-xl text-sm text-center">
+                    <i class="ph ph-check-circle mr-1"></i> 已複製到剪貼簿！
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-8 text-center text-sm font-bold text-slate-700">
+        Copyright &copy; Vinny的AI百寶箱
+    </footer>
+
+    <script>
+        const genreData = [
+            {
+                category: "流行 (Pop)",
+                items: [
+                    { name: "華語流行", prompt: "mandopop, pop, catchy melody, emotional" },
+                    { name: "K-Pop", prompt: "k-pop, energetic, electronic dance, idol pop" },
+                    { name: "歐美流行", prompt: "western pop, billboard top, modern pop" },
+                    { name: "復古流行", prompt: "retro pop, 80s synth, nostalgic" }
+                ]
+            },
+            {
+                category: "搖滾 (Rock)",
+                items: [
+                    { name: "流行搖滾", prompt: "pop rock, energetic, electric guitar, upbeat" },
+                    { name: "龐克搖滾", prompt: "punk rock, fast, rebellious, distorted guitar" },
+                    { name: "另類搖滾", prompt: "alternative rock, indie, moody" },
+                    { name: "重金屬", prompt: "heavy metal, aggressive, loud, screaming vocals" }
+                ]
+            },
+            {
+                category: "電子 (Electronic)",
+                items: [
+                    { name: "EDM", prompt: "edm, electronic dance music, heavy bass, club" },
+                    { name: "合成器流行", prompt: "synthpop, synthesizers, electronic beats" },
+                    { name: "Lo-Fi", prompt: "lo-fi beats, chill, relaxing, ambient" },
+                    { name: "浩室", prompt: "house music, 4/4 beat, groove" }
+                ]
+            },
+            {
+                category: "傳統與古典",
+                items: [
+                    { name: "古典樂", prompt: "classical music, orchestral, grand, symphonic" },
+                    { name: "爵士樂", prompt: "jazz, saxophone, swing, smooth, brass" },
+                    { name: "鄉村音樂", prompt: "country music, acoustic guitar, folk" }
+                ]
+            }
+        ];
+
+        const elementData = [
+            {
+                category: "主導樂器 (Lead Instruments)",
+                items: [
+                    { name: "木吉他獨奏", prompt: "acoustic guitar solo, fingerstyle" },
+                    { name: "優美鋼琴", prompt: "beautiful piano, piano solo, gentle keys" },
+                    { name: "史詩弦樂", prompt: "epic strings, violin, cello, cinematic strings" },
+                    { name: "強烈電吉他", prompt: "distorted electric guitar, guitar riff" },
+                    { name: "合成器音效", prompt: "synths, electronic leads, futuristic sounds" }
+                ]
+            },
+            {
+                category: "節奏與速度 (Rhythm & Tempo)",
+                items: [
+                    { name: "快節奏", prompt: "fast tempo, upbeat, driving rhythm, 140bpm" },
+                    { name: "慢節奏 (抒情)", prompt: "slow tempo, ballad, downbeat, relaxing" },
+                    { name: "動感律動", prompt: "groovy, syncopated rhythm, danceable" },
+                    { name: "沈重節拍", prompt: "heavy drum beats, punchy kick, bass drop" }
+                ]
+            },
+            {
+                category: "氛圍與情感 (Vibe & Mood)",
+                items: [
+                    { name: "悲傷憂鬱", prompt: "sad, melancholic, emotional, heartbreaking" },
+                    { name: "快樂陽光", prompt: "happy, joyful, sunny, uplifting, bright" },
+                    { name: "史詩磅礴", prompt: "epic, grand, cinematic, heroic, triumphant" },
+                    { name: "神祕黑暗", prompt: "dark, mysterious, haunting, eerie" },
+                    { name: "空靈夢幻", prompt: "ethereal, dreamy, atmospheric, ambient" }
+                ]
+            },
+            {
+                category: "人聲特徵 (Vocal Styles)",
+                items: [
+                    { name: "清晰女聲", prompt: "clear female vocals, beautiful voice" },
+                    { name: "深沉男聲", prompt: "deep male vocals, husky voice" },
+                    { name: "虛擬電子音", prompt: "vocoder, robotic voice, autotune" },
+                    { name: "無人聲 (純音樂)", prompt: "instrumental only, no vocals" }
+                ]
+            }
+        ];
+
+        const songContentInput = document.getElementById('songContent');
+        const musicGenreSelect = document.getElementById('musicGenre');
+        const musicElementSelect = document.getElementById('musicElement');
+        const generateBtn = document.getElementById('generateBtn');
+        const outputPrompt = document.getElementById('outputPrompt');
+        const copyBtn = document.getElementById('copyBtn');
+        const toast = document.getElementById('toast');
+
+        function populateSelect(selectElement, data) {
+            data.forEach(group => {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = group.category;
+                group.items.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.prompt; 
+                    option.textContent = `${item.name} (${item.prompt})`;
+                    optgroup.appendChild(option);
+                });
+                selectElement.appendChild(optgroup);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            populateSelect(musicGenreSelect, genreData);
+            populateSelect(musicElementSelect, elementData);
+        });
+
+        generateBtn.addEventListener('click', () => {
+            const content = songContentInput.value.trim();
+            const genre = musicGenreSelect.value;
+            const element = musicElementSelect.value;
+
+            if (!content) {
+                alert("請輸入歌曲內容");
+                songContentInput.focus();
+                return;
+            }
+            if (!genre) {
+                alert("請選擇音樂曲風");
+                musicGenreSelect.focus();
+                return;
+            }
+            if (!element) {
+                alert("請選擇音樂元素");
+                musicElementSelect.focus();
+                return;
+            }
+
+            const finalPrompt = `根據下文的報告內容生成一個SUNO提示詞。
+
+歌曲內容: ${content}
+
+請生成SUNO提示詞關於${content}
+音樂曲風為${genre}
+音樂元素為${element}
+
+要生成SUNO的歌曲名稱、歌詞、曲風`;
+
+            outputPrompt.value = finalPrompt;
+            copyBtn.classList.remove('opacity-0', 'pointer-events-none');
+            copyBtn.removeAttribute('disabled');
+        });
+
+        copyBtn.addEventListener('click', () => {
+            outputPrompt.select();
+            outputPrompt.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+                toast.classList.remove('opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('opacity-0');
+                }, 2000);
+                window.getSelection().removeAllRanges();
+            } catch (err) {
+                alert('複製失敗，請手動選取複製');
+            }
+        });
+    </script>
+</body>
+</html>
