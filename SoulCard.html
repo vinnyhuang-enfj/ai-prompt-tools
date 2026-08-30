@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心靈圖卡 AI 提示詞生成器 - AI提示詞工具箱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #FEF9E7; /* 淡鵝黃色底 */
+            color: #1E293B; /* 黑字 */
+        }
+        .comic-box {
+            border: 3px solid #1E293B;
+            box-shadow: 5px 5px 0px #1E293B;
+        }
+        .comic-btn {
+            border: 2.5px solid #1E293B;
+            box-shadow: 3px 3px 0px #1E293B;
+            transition: all 0.15s ease-in-out;
+        }
+        .comic-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px #1E293B;
+        }
+        .comic-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #1E293B;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FEF3C7; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #F59E0B; 
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen p-4 md:p-8 flex flex-col justify-between">
+
+    <div class="max-w-6xl mx-auto w-full">
+        <!-- 頂部導航列：回首頁與標籤 -->
+        <div class="flex items-center justify-between mb-6">
+            <a href="index.html" class="comic-btn inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-white font-bold px-4 py-2 rounded-xl text-sm sm:text-base">
+                <i class="fas fa-arrow-left"></i> 回首頁重新選擇
+            </a>
+            <span class="font-bold text-sm bg-amber-200 border-2 border-slate-900 px-3 py-1 rounded-full">🌱 心靈療癒小幫手</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <!-- 左側：輸入表單 -->
+            <div class="comic-box bg-white rounded-3xl p-6 flex flex-col gap-5">
+                <h1 class="text-2xl font-black text-slate-900 flex items-center gap-2">
+                    <span class="text-orange-500"><i class="fas fa-heart"></i></span> 心靈圖卡 AI 提示詞生成器
+                </h1>
+
+                <!-- 區塊 1：畫面與人物設定 -->
+                <div class="border-2 border-slate-900 bg-amber-50 p-4 rounded-2xl space-y-3">
+                    <h2 class="text-base font-black text-slate-900 border-b-2 border-slate-900 pb-1.5 flex items-center gap-1.5">
+                        <i class="fas fa-palette text-orange-500"></i> 1. 人物與畫面風格
+                    </h2>
+
+                    <div>
+                        <label for="charStyle" class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">繪圖風格</label>
+                        <input type="text" id="charStyle" value="溫暖親切的手繪插畫風格，細膩柔和的光影 (warm, comforting hand-painted illustration)" class="w-full rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium transition-all">
+                    </div>
+
+                    <div>
+                        <label for="charDesc" class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">人物特徵與動作</label>
+                        <input type="text" id="charDesc" value="一位戴眼鏡、微捲長棕髮、戴著絲巾的親切中年亞洲女性，手裡拿著咖啡杯微笑" class="w-full rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium transition-all">
+                    </div>
+
+                    <div>
+                        <label for="charClothes" class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">服裝搭配</label>
+                        <input type="text" id="charClothes" value="淺藍色西裝外套、白色內搭上衣、深藍色長裙與高跟鞋" class="w-full rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium transition-all">
+                    </div>
+
+                    <div>
+                        <label for="sceneDesc" class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">背景場景與氛圍</label>
+                        <input type="text" id="sceneDesc" value="清晨日出的河畔木棧道、垂柳、花草，旁邊停放一台白色轎車，遠處有城市天際線與橋樑" class="w-full rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium transition-all">
+                    </div>
+
+                    <div>
+                        <label for="boardStyle" class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">看板外觀</label>
+                        <input type="text" id="boardStyle" value="左側立著一座深綠色木質公告欄，上面釘著宣紙手寫標語與小便利貼" class="w-full rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium transition-all">
+                    </div>
+                </div>
+
+                <!-- 區塊 2：看板文字與細節 -->
+                <div class="border-2 border-slate-900 bg-amber-50 p-4 rounded-2xl space-y-3">
+                    <h2 class="text-base font-black text-slate-900 border-b-2 border-slate-900 pb-1.5 flex items-center gap-1.5">
+                        <i class="fas fa-comment-dots text-orange-500"></i> 2. 看板文字與細節
+                    </h2>
+
+                    <div>
+                        <label for="mainQuote" class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">主要金句 (主海報)</label>
+                        <textarea id="mainQuote" rows="2" class="w-full rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium resize-none">留一點從容給今天，
+明天就有力量重新出發</textarea>
+                    </div>
+
+                    <div>
+                        <label for="subQuote" class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">問候與叮嚀 (中間便籤)</label>
+                        <textarea id="subQuote" rows="2" class="w-full rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium resize-none">日安！
+把心安頓好，也是重要的準備。</textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">四個微行動 / 備忘筆記 (下方夾著的小卡)</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="note1" value="給人信心" class="rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium">
+                            <input type="text" id="note2" value="給人歡喜" class="rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium">
+                            <input type="text" id="note3" value="給人希望" class="rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium">
+                            <input type="text" id="note4" value="給人方便" class="rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="signName" class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">名牌署名</label>
+                            <input type="text" id="signName" value="" placeholder="請輸入姓名" class="w-full rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium">
+                        </div>
+                        <div>
+                            <label for="aspectRatio" class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">圖片比例</label>
+                            <select id="aspectRatio" class="w-full rounded-xl border-2 border-slate-900 p-2 text-sm bg-white focus:bg-amber-100/40 outline-none font-medium">
+                                <option value="1:1">1:1 (正方形)</option>
+                                <option value="16:9">16:9 (橫向長圖)</option>
+                                <option value="9:16">9:16 (手機直式桌布)</option>
+                                <option value="4:3">4:3 (標準橫向)</option>
+                                <option value="3:4">3:4 (標準直向)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右側：結果輸出與範例圖 -->
+            <div class="comic-box bg-white rounded-3xl p-6 flex flex-col gap-6">
+                
+                <!-- 提示詞生成結果 -->
+                <div class="flex flex-col">
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="text-lg font-black text-slate-900 flex items-center gap-1.5">
+                            <i class="fas fa-language text-orange-500"></i> 提示詞生成結果
+                        </h2>
+                        <button onclick="copyPrompt('promptZH', '已成功複製提示詞！')" class="comic-btn bg-orange-500 hover:bg-orange-400 text-white px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5">
+                            <i class="fas fa-copy"></i> 複製提示詞
+                        </button>
+                    </div>
+                    <textarea id="promptZH" readonly class="w-full h-80 rounded-2xl border-2 border-slate-900 p-3 bg-amber-50 text-slate-900 focus:outline-none resize-none text-xs sm:text-sm leading-relaxed font-mono shadow-inner"></textarea>
+                    
+                    <!-- 複製與驗證提示通知 -->
+                    <div id="toast" class="opacity-0 transition-opacity duration-300 mt-3 bg-emerald-400 border-2 border-slate-900 text-slate-900 font-bold px-4 py-2 rounded-xl text-sm text-center flex items-center justify-center gap-2">
+                        <i id="toastIcon" class="fas fa-check-circle"></i> <span id="toastMsg">已成功複製提示詞！</span>
+                    </div>
+                </div>
+
+                <!-- 範例圖片展示區塊 -->
+                <div class="border-2 border-slate-900 bg-amber-50 p-4 rounded-2xl">
+                    <h2 class="text-base font-black text-slate-900 border-b-2 border-slate-900 pb-2 mb-3 flex items-center gap-1.5">
+                        <i class="fas fa-image text-orange-500"></i> 範例
+                    </h2>
+                    <div class="rounded-xl overflow-hidden border-2 border-slate-900 bg-white">
+                        <img src="SoulCard.png" alt="心靈圖卡範例" class="w-full h-auto object-cover block">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁尾宣告 -->
+    <footer class="mt-8 text-center text-sm font-bold text-slate-700">
+        Copyright &copy; Vinny的AI百寶箱
+    </footer>
+
+    <script>
+        // 欄位定義與中文名稱對應表
+        const fieldMap = [
+            { id: 'charStyle', name: '繪圖風格' },
+            { id: 'charDesc', name: '人物特徵與動作' },
+            { id: 'charClothes', name: '服裝搭配' },
+            { id: 'sceneDesc', name: '背景場景與氛圍' },
+            { id: 'boardStyle', name: '看板外觀' },
+            { id: 'mainQuote', name: '主要金句' },
+            { id: 'subQuote', name: '問候與叮嚀' },
+            { id: 'note1', name: '行動筆記 1' },
+            { id: 'note2', name: '行動筆記 2' },
+            { id: 'note3', name: '行動筆記 3' },
+            { id: 'note4', name: '行動筆記 4' },
+            { id: 'signName', name: '名牌署名' },
+            { id: 'aspectRatio', name: '圖片比例' }
+        ];
+
+        function updatePrompts() {
+            const charStyle = document.getElementById('charStyle').value.trim();
+            const charDesc = document.getElementById('charDesc').value.trim();
+            const charClothes = document.getElementById('charClothes').value.trim();
+            const sceneDesc = document.getElementById('sceneDesc').value.trim();
+            const boardStyle = document.getElementById('boardStyle').value.trim();
+            const mainQuote = document.getElementById('mainQuote').value.replace(/\n/g, ' ').trim();
+            const subQuote = document.getElementById('subQuote').value.replace(/\n/g, ' ').trim();
+            const note1 = document.getElementById('note1').value.trim();
+            const note2 = document.getElementById('note2').value.trim();
+            const note3 = document.getElementById('note3').value.trim();
+            const note4 = document.getElementById('note4').value.trim();
+            const signName = document.getElementById('signName').value.trim();
+            const ar = document.getElementById('aspectRatio').value;
+
+            // 繁體中文提示詞
+            const zhPrompt = `【畫面風格】：${charStyle || '[未設定風格]'}。
+【主要人物】：${charDesc || '[未設定人物]'}，穿著${charClothes || '[未設定服裝]'}。
+【環境背景】：${sceneDesc || '[未設定背景]'}。
+【看板元素】：${boardStyle || '[未設定看板]'}。
+【看板繁體中文文字細節】：
+1. 頂部主要海報毛筆字：「${mainQuote || '[未輸入金句]'}」
+2. 中間貼上的便籤文字：「${subQuote || '[未輸入叮嚀]'}」
+3. 下方用夾子夾住的四張小便籤，分別寫著：「${note1 || ''}」、「${note2 || ''}」、「${note3 || ''}」、「${note4 || ''}」
+4. 最底部木質銘牌刻字：「${signName || '[未署名]'}」
+【整體要求】：字體清晰工整、繁體中文楷書或手寫體、排版乾淨精緻、高解析度細節，畫面比例 --ar ${ar}`;
+
+            document.getElementById('promptZH').value = zhPrompt;
+        }
+
+        function validateFields() {
+            for (const field of fieldMap) {
+                const el = document.getElementById(field.id);
+                if (!el || !el.value.trim()) {
+                    return field;
+                }
+            }
+            return null;
+        }
+
+        function copyPrompt(id, message) {
+            const emptyField = validateFields();
+            if (emptyField) {
+                const targetEl = document.getElementById(emptyField.id);
+                targetEl.focus();
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                showToast(`請填寫「${emptyField.name}」欄位！`, 'error');
+                return;
+            }
+
+            const target = document.getElementById(id);
+            target.select();
+            target.setSelectionRange(0, 99999);
+            try {
+                navigator.clipboard.writeText(target.value);
+                showToast(message, 'success');
+            } catch (err) {
+                document.execCommand('copy');
+                showToast(message, 'success');
+            }
+        }
+
+        let toastTimer = null;
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.innerText = message;
+
+            if (type === 'error') {
+                toast.className = "transition-opacity duration-300 mt-3 bg-rose-400 border-2 border-slate-900 text-slate-900 font-bold px-4 py-2 rounded-xl text-sm text-center flex items-center justify-center gap-2";
+                toastIcon.className = "fas fa-exclamation-triangle text-slate-900";
+            } else {
+                toast.className = "transition-opacity duration-300 mt-3 bg-emerald-400 border-2 border-slate-900 text-slate-900 font-bold px-4 py-2 rounded-xl text-sm text-center flex items-center justify-center gap-2";
+                toastIcon.className = "fas fa-check-circle text-slate-900";
+            }
+
+            toast.classList.remove('opacity-0');
+            
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('opacity-0');
+            }, 2500);
+        }
+
+        fieldMap.forEach(field => {
+            const el = document.getElementById(field.id);
+            if (el) {
+                el.addEventListener('input', updatePrompts);
+                el.addEventListener('change', updatePrompts);
+            }
+        });
+
+        // 頁面初始化
+        updatePrompts();
+    </script>
+</body>
+</html>
